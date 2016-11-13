@@ -1,0 +1,13 @@
+C:\Users\Rel\Documents\GitHub\linearAlgebra\linearAlgebra\linearAlgebra\bin\Debug\linearAlgebra.exe
+C:\Users\Rel\Documents\GitHub\linearAlgebra\linearAlgebra\linearAlgebra\bin\Debug\linearAlgebra.pdb
+C:\Users\Rel\Documents\GitHub\linearAlgebra\linearAlgebra\linearAlgebra\obj\Debug\linearAlgebra.csprojResolveAssemblyReference.cache
+C:\Users\Rel\Documents\GitHub\linearAlgebra\linearAlgebra\linearAlgebra\obj\Debug\MainWindow.g.cs
+C:\Users\Rel\Documents\GitHub\linearAlgebra\linearAlgebra\linearAlgebra\obj\Debug\App.g.cs
+C:\Users\Rel\Documents\GitHub\linearAlgebra\linearAlgebra\linearAlgebra\obj\Debug\linearAlgebra_MarkupCompile.cache
+C:\Users\Rel\Documents\GitHub\linearAlgebra\linearAlgebra\linearAlgebra\obj\Debug\linearAlgebra_MarkupCompile.lref
+C:\Users\Rel\Documents\GitHub\linearAlgebra\linearAlgebra\linearAlgebra\obj\Debug\MainWindow.baml
+C:\Users\Rel\Documents\GitHub\linearAlgebra\linearAlgebra\linearAlgebra\obj\Debug\linearAlgebra.g.resources
+C:\Users\Rel\Documents\GitHub\linearAlgebra\linearAlgebra\linearAlgebra\obj\Debug\linearAlgebra.Properties.Resources.resources
+C:\Users\Rel\Documents\GitHub\linearAlgebra\linearAlgebra\linearAlgebra\obj\Debug\linearAlgebra.csproj.GenerateResource.Cache
+C:\Users\Rel\Documents\GitHub\linearAlgebra\linearAlgebra\linearAlgebra\obj\Debug\linearAlgebra.exe
+C:\Users\Rel\Documents\GitHub\linearAlgebra\linearAlgebra\linearAlgebra\obj\Debug\linearAlgebra.pdb
