@@ -38,5 +38,11 @@ namespace linearAlgebra
             vector.Y2 = y;
             canvas.Children.Add(vector);
         }
+
+        public void scale(double factor)
+        {
+            this.x = this.x * factor;
+            this.y = this.y * factor;
+        }
     }
 }
