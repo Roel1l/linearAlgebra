@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:linearAlgebra"
         mc:Ignorable="d"
-        Title="Lineare Algebra" Height="350" Width="525">
+        Title="Lineare Algebra" Height="700" Width="1050"
+        KeyDown="OnKeyDown">
     <Grid>
-        <Canvas Name="canvas" HorizontalAlignment="Left" Height="100" Margin="24.592,31.169,0,0" VerticalAlignment="Top" Width="100"/>
+        <Canvas Name="canvas" HorizontalAlignment="Left" Height="309" VerticalAlignment="Top" Width="517"/>
     </Grid>
 </Window>

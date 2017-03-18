@@ -11,34 +11,31 @@ namespace linearAlgebra
     class Vector
     {
         private Canvas canvas;
-        private int length;
-        public int directionX;
-        public int directionY;
-        public double startX;
-        public double startY;
-        private Line vector = new Line();
+        private double length;
+        public double x;
+        public double y;
+        public double originX = 0;
+        public double originY = 0;
+        private Line vector;
 
-        public Vector(Canvas canvas, int directionX, int directionY)
+        public Vector(Canvas canvas, double x, double y)
         {
             this.canvas = canvas;
-            this.directionX = directionX;
-            this.directionY = directionY;
+            this.x = x;
+            this.y = y;
 
-            this.startX = canvas.Width / 2;
-            this.startY = canvas.Height / 2;
+            vector = new Line();
+            vector.Stroke = Brushes.Black;
+            vector.StrokeThickness = 2;
         }
 
         public void draw()
         {
-            Line vector = new Line();
-            vector.Stroke = Brushes.Black;
-            vector.StrokeThickness = 2;
-
-            vector.X1 = startX;
-            vector.Y1 = startY;
-            vector.X2 = startX + directionX;
-            vector.Y2 = startY + directionY;
-
+            canvas.Children.Remove(vector);
+            vector.X1 = originX;
+            vector.Y1 = originY;
+            vector.X2 = x;
+            vector.Y2 = y;
             canvas.Children.Add(vector);
         }
     }

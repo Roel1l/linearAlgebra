@@ -20,15 +20,40 @@ namespace linearAlgebra
     public partial class MainWindow : Window
     {
 
+        Point p;
+        Vector v;
+
         public MainWindow() 
         {
-            InitializeComponent();        
+            InitializeComponent();
 
-           // Triangle T = new Triangle(canvas);
-            Vector V = new Vector(canvas, 100, -10);
-            V.draw();
+            p = new Point(canvas, 100, 100);
+            v = new Vector(canvas, 10, 10);
+            p.draw();
+            v.draw();
         }
 
+        private void OnKeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.Right:
+                    p.x++;
+                    break;
+                case Key.Left:
+                    p.x--;
+                    break;
+                case Key.Up:
+                    p.y--;
+                    break;
+                case Key.Down:
+                    p.y++;
+                    break;
+
+            }
+
+            p.draw();
+        }
 
     }
 
