@@ -27,10 +27,30 @@ namespace linearAlgebra
         {
             InitializeComponent();
 
-            p = new Point(canvas, 100, 100);
-            v = new Vector(canvas, 10, 10);
-            p.draw();
-            v.draw();
+            Matrix matrix = new Matrix(canvas, 2, 4);
+
+            matrix.set(1, 1, 100);
+            matrix.set(1, 2, 500);
+            matrix.set(1, 3, 500);
+            matrix.set(1, 4, 100);
+
+            matrix.set(2, 1, 100);
+            matrix.set(2, 2, 100);
+            matrix.set(2, 3, 500);
+            matrix.set(2, 4, 500);
+
+            matrix.draw();
+
+            Matrix matrix2 = new Matrix(canvas, 2, 2);
+
+            matrix2.set(1, 1, 1.2);
+            matrix2.set(1, 2, 0);
+            matrix2.set(2, 1, 0);
+            matrix2.set(2, 2, 1.1);
+
+
+            //v = new Vector(canvas, 10, 10);
+            //v.draw();
         }
 
         private void OnKeyDown(object sender, KeyEventArgs e)
@@ -38,23 +58,36 @@ namespace linearAlgebra
             switch (e.Key)
             {
                 case Key.Right:
-                    p.x++;
+                   
                     break;
                 case Key.Left:
-                    p.x--;
+                    
                     break;
                 case Key.Up:
-                    p.y--;
+                    
                     break;
                 case Key.Down:
-                    p.y++;
+                    
                     break;
 
             }
 
-            p.draw();
+           
         }
+        
+        private void scaleMatrices(Matrix A, Matrix B)
+        {
+            Matrix C;
+            C = new Matrix(canvas, B.rows, A.columns);
+            for (int row = 1; row <= C.rows; row++)
+            {
+                for (int column = 1; column <= C.columns; column++)
+                {
+                    double? result = A.get(row, column);
+                }
+            }
 
+        }
     }
 
 
