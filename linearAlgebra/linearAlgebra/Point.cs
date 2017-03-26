@@ -52,5 +52,11 @@ namespace linearAlgebra
             this.canvas.Children.Add(line1);
             this.canvas.Children.Add(line2);
         }
+
+        public void undraw()
+        {
+            this.canvas.Children.Remove(line1);
+            this.canvas.Children.Remove(line2);
+        }
     }
 }

@@ -8,6 +8,6 @@
         Title="Lineare Algebra" Height="700" Width="1050"
         KeyDown="OnKeyDown">
     <Grid>
-        <Canvas Name="canvas" HorizontalAlignment="Left" Height="309" VerticalAlignment="Top" Width="517"/>
+        <Canvas Name="canvas" HorizontalAlignment="Left" Height="659" VerticalAlignment="Top" Width="1032"/>
     </Grid>
 </Window>

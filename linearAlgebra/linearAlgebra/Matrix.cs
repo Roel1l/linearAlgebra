@@ -16,6 +16,7 @@ namespace linearAlgebra
 
         private DoubleKeyDictionary doubleKeyDictionary;
         private List<Point> matrixPoints;
+        private List<Rope> matrixLines;
         
         public Matrix(Canvas canvas, int rows, int columns)
         {
@@ -24,6 +25,7 @@ namespace linearAlgebra
             this.columns = columns;
             doubleKeyDictionary = new DoubleKeyDictionary();
             matrixPoints = new List<Point>();
+            matrixLines = new List<Rope>();
         }
 
         public void set(int row, int column, double value)
@@ -31,6 +33,28 @@ namespace linearAlgebra
             if (row > 0 && row <= rows && column > 0 && row <= columns) {
                 doubleKeyDictionary.set(row, column, value);
             }
+        }
+
+        public double?[] getRow(int rowIndex)
+        {
+
+            double?[] numbers = new double?[columns];
+            for(int i = 0; i < columns; i++)
+            {
+                numbers[i] = doubleKeyDictionary.get(rowIndex, i + 1);
+            }
+            return numbers;
+        }
+
+        public double?[] getColumn(int columnIndex)
+        {
+
+            double?[] numbers = new double?[rows];
+            for (int i = 0; i < rows; i++)
+            {
+                numbers[i] = doubleKeyDictionary.get(i + 1, columnIndex);
+            }
+            return numbers;
         }
 
         public double? get(int row, int column)
@@ -45,6 +69,7 @@ namespace linearAlgebra
 
         public void draw()
         {
+            matrixLines.Clear();
             matrixPoints.Clear();
             for (int column = 1; column <= columns; column++)
             {
@@ -81,13 +106,21 @@ namespace linearAlgebra
                 if(pointIndex == matrixPoints.Count - 1)
                 {
                     line = new Rope(canvas, matrixPoints[pointIndex].x, matrixPoints[pointIndex].y, matrixPoints[0].x, matrixPoints[0].y);
+                    matrixLines.Add(line);
                 }
                 else
                 {
                     line = new Rope(canvas, matrixPoints[pointIndex].x, matrixPoints[pointIndex].y, matrixPoints[pointIndex+1].x, matrixPoints[pointIndex + 1].y);
+                    matrixLines.Add(line);
                 }
                 line.draw();
             }
+        }
+
+        public void undraw()
+        {
+            foreach(Rope r in matrixLines) r.undraw();       
+            foreach (Point p in matrixPoints) p.undraw();
         }
     }
 

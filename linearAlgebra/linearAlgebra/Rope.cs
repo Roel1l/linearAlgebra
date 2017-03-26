@@ -38,5 +38,10 @@ namespace linearAlgebra
             rope.Y2 = Y2;
             canvas.Children.Add(rope);
         }
+
+        public void undraw()
+        {
+            canvas.Children.Remove(rope);
+        }
     }
 }
