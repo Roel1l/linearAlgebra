@@ -23,34 +23,7 @@ namespace linearAlgebra
         public MainWindow() 
         {
             InitializeComponent();
-
-            rectangle();
-
-            //Matrix matrix2 = new Matrix(canvas, 2, 2);
-
-            //matrix2.set(1, 1, 1.2);
-            //matrix2.set(1, 2, 0);
-            //matrix2.set(2, 1, 0);
-            //matrix2.set(2, 2, 1.1);
-
-            //shape = new Matrix(canvas, 2, 4);
-
-            //shape.set(1, 1, 30);
-            //shape.set(1, 2, 40);
-            //shape.set(1, 3, 60);
-            //shape.set(1, 4, 10);
-
-            //shape.set(2, 1, 20);
-            //shape.set(2, 2, 10);
-            //shape.set(2, 3, 70);
-            //shape.set(2, 4, 50);
-
-            //shape.draw();
-
-            //Matrix m = scaleMatrices(matrix2, shape);
-            //double?[] a = m.getRow(1);
-            //double?[] b = m.getRow(2);
-
+            initShape();
         }
 
         private void OnKeyDown(object sender, KeyEventArgs e)
@@ -58,32 +31,54 @@ namespace linearAlgebra
             switch (e.Key)
             {
                 case Key.Right:
-                   
+                    shape.undraw();
+                    shape = translate(shape, 5, 0);
+                    shape.draw();
                     break;
                 case Key.Left:
-                    
+                    shape.undraw();
+                    shape = translate(shape, -5, 0);
+                    shape.draw();
                     break;
                 case Key.Up:
-                    
+                    shape.undraw();
+                    shape = translate(shape, 0, -5);
+                    shape.draw();
                     break;
                 case Key.Down:
-                    
-                    break;
-                case Key.Space:
-                    Matrix matrix2 = new Matrix(canvas, 2, 2);
-
-                    matrix2.set(1, 1, 1.1);
-                    matrix2.set(1, 2, 0);
-                    matrix2.set(2, 1, 0);
-                    matrix2.set(2, 2, 1.1);
                     shape.undraw();
-                    shape = scaleMatrices(matrix2, shape);
+                    shape = translate(shape, 0, 5);
+                    shape.draw();
+                    break;
+                case Key.OemMinus:            
+                    shape.undraw();
+                    shape = scale(shape, 0.9, 0.9);
+                    shape.draw();
+                    break;
+                case Key.OemPlus:
+                    shape.undraw();
+                    shape = scale(shape, 1.1, 1.1);
+                    shape.draw();
+                    break;
+                case Key.D:
+                    shape.undraw();
+                    shape = rotate(shape, 10, 300, 300);
+                    shape.draw();
+                    break;
+                case Key.A:
+                    shape.undraw();
+                    shape = rotate(shape, -10, 300, 300);
+                    shape.draw();
+                    break;
+                case Key.Z:
+                    shape.undraw();
+                    shape = scaleAndTranslate(shape, 1.1, 1.1, -10, -10);
                     shape.draw();
                     break;
             }
         }
         
-        private Matrix scaleMatrices(Matrix A, Matrix B)
+        private Matrix multiplyMatrices(Matrix A, Matrix B)
         {
             Matrix C;
             C = new Matrix(canvas, A.rows, B.columns);
@@ -95,6 +90,101 @@ namespace linearAlgebra
                 }
             }
             return C;
+        }
+
+        private Matrix translate(Matrix matrixToTranslate, double translationX, double translationY)
+        {
+            if (matrixToTranslate.rows != 2) throw new Exception("Incorrect number of rows in matrix to translate (should be 2)");
+
+            Matrix translationMatrix = new Matrix(canvas, 3, 3);
+            translationMatrix.set(1, 1, 1);
+            translationMatrix.set(1, 2, 0);
+            translationMatrix.set(1, 3, translationX);
+
+            translationMatrix.set(2, 1, 0);
+            translationMatrix.set(2, 2, 1);
+            translationMatrix.set(2, 3, translationY);
+
+            translationMatrix.set(3, 1, 0);
+            translationMatrix.set(3, 2, 0);
+            translationMatrix.set(3, 3, 1);
+
+            matrixToTranslate.rows = 3;
+            for(int i = 1; i <= matrixToTranslate.columns; i++)
+            {
+                matrixToTranslate.set(3, i, 1);
+            }
+
+            Matrix translatedMatrix = multiplyMatrices(translationMatrix, matrixToTranslate);
+            translatedMatrix.rows = 2;
+
+            return translatedMatrix;
+        }
+
+        private Matrix scale(Matrix matrixToScale, double scaleX, double scaleY)
+        {
+            if (matrixToScale.rows != 2) throw new Exception("Incorrect number of rows in matrix to translate (should be 2)");
+
+            Matrix scalingMatrix = new Matrix(canvas, 2, 2);
+
+            scalingMatrix.set(1, 1, scaleX);
+            scalingMatrix.set(1, 2, 0);
+            scalingMatrix.set(2, 1, 0);
+            scalingMatrix.set(2, 2, scaleY);
+
+            Matrix scaledMatrix = multiplyMatrices(scalingMatrix, matrixToScale);
+
+            return scaledMatrix;
+        }
+
+        private Matrix scaleAndTranslate(Matrix matrixToUpdate, double scaleX, double scaleY, double translationX, double translationY)
+        {
+            if (matrixToUpdate.rows != 2) throw new Exception("Incorrect number of rows in matrix to translate (should be 2)");
+
+            Matrix updateMatrix = new Matrix(canvas, 3, 3);
+            updateMatrix.set(1, 1, scaleX);
+            updateMatrix.set(1, 2, 0);
+            updateMatrix.set(1, 3, translationX);
+
+            updateMatrix.set(2, 1, 0);
+            updateMatrix.set(2, 2, scaleY);
+            updateMatrix.set(2, 3, translationY);
+
+            updateMatrix.set(3, 1, 0);
+            updateMatrix.set(3, 2, 0);
+            updateMatrix.set(3, 3, 1);
+
+            matrixToUpdate.rows = 3;
+            for (int i = 1; i <= matrixToUpdate.columns; i++)
+            {
+                matrixToUpdate.set(3, i, 1);
+            }
+
+            Matrix returnMatrix = multiplyMatrices(updateMatrix, matrixToUpdate);
+            returnMatrix.rows = 2;
+
+            return returnMatrix;
+        }
+
+        private Matrix rotate(Matrix matrixToRotate, double degrees, double rotationPointX, double rotationPointY)
+        {
+            double theta = Math.Sin(degrees * (Math.PI / 180.0));
+            double cos = Math.Cos(theta);
+            double sin = Math.Sin(theta);
+
+            Matrix rotationMatrix = new Matrix(canvas, 2, 2);
+            rotationMatrix.set(1, 1, cos);
+            rotationMatrix.set(1, 2, -sin);
+            rotationMatrix.set(2, 1, sin);
+            rotationMatrix.set(2, 2, cos);
+
+            Matrix translatedToOrigin = translate(matrixToRotate, -rotationPointX, -rotationPointY);
+
+            Matrix rotatedMatrix = multiplyMatrices(rotationMatrix, translatedToOrigin);
+
+            Matrix translatedBack = translate(rotatedMatrix, rotationPointX, rotationPointY);
+
+            return translatedBack;
         }
 
         private double rowTimesColumn(double?[] row, double?[] column)
@@ -111,7 +201,7 @@ namespace linearAlgebra
             return (double)answer;
         }
 
-        private void rectangle()
+        private void initShape()
         {
             shape = new Matrix(canvas, 2, 4);
 
@@ -126,32 +216,6 @@ namespace linearAlgebra
             shape.set(2, 4, 500);
 
             shape.draw();
-
-        }
-
-        private void scaleMatrixTest()
-        {
-            Matrix A = new Matrix(canvas, 2, 2);
-            A.set(1, 1, 4);
-            A.set(1, 2, 1);
-            A.set(2, 1, 2);
-            A.set(2, 2, 3);
-
-            Matrix B = new Matrix(canvas, 2, 3);
-            B.set(1, 1, 3);
-            B.set(1, 2, 0);
-            B.set(1, 3, 4);
-
-            B.set(2, 1, 2);
-            B.set(2, 2, 5);
-            B.set(2, 3, 1);
-
-            Matrix newMatrix = scaleMatrices(A, B);
-            double?[] a = newMatrix.getRow(1);
-            double?[] b = newMatrix.getRow(2);
-
         }
     }
-
-
 }
