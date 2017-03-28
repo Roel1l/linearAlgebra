@@ -25,34 +25,37 @@ namespace linearAlgebra
         {
             InitializeComponent();
             initShapeMatrix();
+
         }
+
+
 
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
             switch (e.Key)
             {
                 case Key.Right:               
-                    cubeMatrix = translate(cubeMatrix, 5, 0);
+                    cubeMatrix = translate(cubeMatrix, 0.1, 0, 0);
                     cubeMatrix.draw(cube);
                     break;
                 case Key.Left:           
-                    cubeMatrix = translate(cubeMatrix, -5, 0);
+                    cubeMatrix = translate(cubeMatrix, -0.1, 0, 0);
                     cubeMatrix.draw(cube);
                     break;
                 case Key.Up:                 
-                    cubeMatrix = translate(cubeMatrix, 0, -5);
+                    cubeMatrix = translate(cubeMatrix, 0, 0.1, 0);
                     cubeMatrix.draw(cube);
                     break;
                 case Key.Down:              
-                    cubeMatrix = translate(cubeMatrix, 0, 5);
+                    cubeMatrix = translate(cubeMatrix, 0, -0.1, 0);
                     cubeMatrix.draw(cube);
                     break;
                 case Key.OemMinus:                        
-                    cubeMatrix = scale(cubeMatrix, 0.9, 0.9);
+                    cubeMatrix = scale(cubeMatrix, 0.9, 0.9, 0.9);
                     cubeMatrix.draw(cube);
                     break;
                 case Key.OemPlus:          
-                    cubeMatrix = scale(cubeMatrix, 1.1, 1.1);
+                    cubeMatrix = scale(cubeMatrix, 1.1, 1.1, 1.1);
                     cubeMatrix.draw(cube);
                     break;
                 case Key.D:
@@ -64,14 +67,21 @@ namespace linearAlgebra
                     cubeMatrix.draw(cube);
                     break;
                 case Key.Z:
-                    cubeMatrix = scaleAndTranslate(cubeMatrix, 1.1, 1.1, -10, -10);
+                    cubeMatrix = scaleAndTranslate(cubeMatrix, 1.1, 1.1, 1.1, -0.1, -0.1, -0.1);
                     cubeMatrix.draw(cube);
                     break;
                 case Key.Space:
-                    cubeMatrix.set(1, 1, 2);
-                    cubeMatrix.draw(cube);
                     break;
             }
+
+            //textBox.Clear();
+
+            //for(int column = 1; column < cubeMatrix.columns; column++)
+            //{
+            //    textBox.Text += "X: " + Math.Round((double)cubeMatrix.get(1, column), 2) + ", ";
+            //    textBox.Text += "Y: " + Math.Round((double)cubeMatrix.get(2, column), 2) + ", ";
+            //    textBox.Text += "Z: " + Math.Round((double)cubeMatrix.get(3, column), 2) + "\n";
+            //}
         }
         
         private Matrix multiplyMatrices(Matrix A, Matrix B)
@@ -88,76 +98,99 @@ namespace linearAlgebra
             return C;
         }
 
-        private Matrix translate(Matrix matrixToTranslate, double translationX, double translationY)
+        private Matrix translate(Matrix matrixToTranslate, double translationX, double translationY, double translationZ)
         {
-            if (matrixToTranslate.rows != 2) throw new Exception("Incorrect number of rows in matrix to translate (should be 2)");
+            if (matrixToTranslate.rows != 3) throw new Exception("Incorrect number of rows in matrix to translate (should be 3)");
 
-            Matrix translationMatrix = new Matrix(3, 3);
+            Matrix translationMatrix = new Matrix(4, 4);
             translationMatrix.set(1, 1, 1);
             translationMatrix.set(1, 2, 0);
-            translationMatrix.set(1, 3, translationX);
+            translationMatrix.set(1, 3, 0);
+            translationMatrix.set(1, 4, translationX);
 
             translationMatrix.set(2, 1, 0);
             translationMatrix.set(2, 2, 1);
-            translationMatrix.set(2, 3, translationY);
+            translationMatrix.set(2, 3, 0);
+            translationMatrix.set(2, 4, translationY);
 
             translationMatrix.set(3, 1, 0);
             translationMatrix.set(3, 2, 0);
             translationMatrix.set(3, 3, 1);
+            translationMatrix.set(3, 4, translationZ);
 
-            matrixToTranslate.rows = 3;
+            translationMatrix.set(4, 1, 0);
+            translationMatrix.set(4, 2, 0);
+            translationMatrix.set(4, 3, 0);
+            translationMatrix.set(4, 4, 1);
+
+            matrixToTranslate.rows = 4;
             for(int i = 1; i <= matrixToTranslate.columns; i++)
             {
-                matrixToTranslate.set(3, i, 1);
+                matrixToTranslate.set(4, i, 1);
             }
 
             Matrix translatedMatrix = multiplyMatrices(translationMatrix, matrixToTranslate);
-            translatedMatrix.rows = 2;
+            translatedMatrix.rows = 3;
 
             return translatedMatrix;
         }
 
-        private Matrix scale(Matrix matrixToScale, double scaleX, double scaleY)
+        private Matrix scale(Matrix matrixToScale, double scaleX, double scaleY, double scaleZ)
         {
-            if (matrixToScale.rows != 2) throw new Exception("Incorrect number of rows in matrix to translate (should be 2)");
+            if (matrixToScale.rows != 3) throw new Exception("Incorrect number of rows in matrix to translate (should be 3)");
 
-            Matrix scalingMatrix = new Matrix(2, 2);
+            Matrix scalingMatrix = new Matrix(3, 3);
 
             scalingMatrix.set(1, 1, scaleX);
             scalingMatrix.set(1, 2, 0);
+            scalingMatrix.set(1, 3, 0);
+
             scalingMatrix.set(2, 1, 0);
             scalingMatrix.set(2, 2, scaleY);
+            scalingMatrix.set(2, 3, 0);
+
+            scalingMatrix.set(3, 1, 0);
+            scalingMatrix.set(3, 2, 0);
+            scalingMatrix.set(3, 3, scaleZ);
 
             Matrix scaledMatrix = multiplyMatrices(scalingMatrix, matrixToScale);
 
             return scaledMatrix;
         }
 
-        private Matrix scaleAndTranslate(Matrix matrixToUpdate, double scaleX, double scaleY, double translationX, double translationY)
+        private Matrix scaleAndTranslate(Matrix matrixToUpdate, double scaleX, double scaleY, double scaleZ, double translationX, double translationY, double translationZ)
         {
-            if (matrixToUpdate.rows != 2) throw new Exception("Incorrect number of rows in matrix to translate (should be 2)");
+            if (matrixToUpdate.rows != 3) throw new Exception("Incorrect number of rows in matrix to translate (should be 3)");
 
-            Matrix updateMatrix = new Matrix(3, 3);
+            Matrix updateMatrix = new Matrix(4, 4);
             updateMatrix.set(1, 1, scaleX);
             updateMatrix.set(1, 2, 0);
-            updateMatrix.set(1, 3, translationX);
+            updateMatrix.set(1, 3, 0);
+            updateMatrix.set(1, 4, translationX);
 
             updateMatrix.set(2, 1, 0);
             updateMatrix.set(2, 2, scaleY);
-            updateMatrix.set(2, 3, translationY);
+            updateMatrix.set(2, 3, 0);
+            updateMatrix.set(2, 4, translationY);
 
             updateMatrix.set(3, 1, 0);
             updateMatrix.set(3, 2, 0);
-            updateMatrix.set(3, 3, 1);
+            updateMatrix.set(3, 3, scaleZ);
+            updateMatrix.set(3, 4, translationZ);
 
-            matrixToUpdate.rows = 3;
+            updateMatrix.set(4, 1, 0);
+            updateMatrix.set(4, 2, 0);
+            updateMatrix.set(4, 3, 0);
+            updateMatrix.set(4, 4, 1);
+
+            matrixToUpdate.rows = 4;
             for (int i = 1; i <= matrixToUpdate.columns; i++)
             {
-                matrixToUpdate.set(3, i, 1);
+                matrixToUpdate.set(4, i, 1);
             }
 
             Matrix returnMatrix = multiplyMatrices(updateMatrix, matrixToUpdate);
-            returnMatrix.rows = 2;
+            returnMatrix.rows = 3;
 
             return returnMatrix;
         }
@@ -174,11 +207,11 @@ namespace linearAlgebra
             rotationMatrix.set(2, 1, sin);
             rotationMatrix.set(2, 2, cos);
 
-            Matrix translatedToOrigin = translate(matrixToRotate, -rotationPointX, -rotationPointY);
+            Matrix translatedToOrigin = translate(matrixToRotate, -rotationPointX, -rotationPointY, 0);
 
             Matrix rotatedMatrix = multiplyMatrices(rotationMatrix, translatedToOrigin);
 
-            Matrix translatedBack = translate(rotatedMatrix, rotationPointX, rotationPointY);
+            Matrix translatedBack = translate(rotatedMatrix, rotationPointX, rotationPointY, 0);
 
             return translatedBack;
         }
@@ -201,7 +234,7 @@ namespace linearAlgebra
         {
             var positions = cube.Positions;
 
-            cubeMatrix = new Matrix(3, 8);
+            cubeMatrix = new Matrix(3, positions.Count);
 
             for (var i = 0; i < positions.Count; i++)
             {
@@ -210,5 +243,6 @@ namespace linearAlgebra
                 cubeMatrix.set(3, i+1, positions[i].Z);
             } 
         }
+
     }
 }
