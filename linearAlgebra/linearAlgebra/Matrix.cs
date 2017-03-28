@@ -4,28 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 
 namespace linearAlgebra
 {
     class Matrix
     {
-        private Canvas canvas;
         public int rows;
         public int columns;
 
         private DoubleKeyDictionary doubleKeyDictionary;
-        private List<Point> matrixPoints;
-        private List<Rope> matrixLines;
         
-        public Matrix(Canvas canvas, int rows, int columns)
+        public Matrix(int rows, int columns)
         {
-            this.canvas = canvas;
             this.rows = rows;
             this.columns = columns;
             doubleKeyDictionary = new DoubleKeyDictionary();
-            matrixPoints = new List<Point>();
-            matrixLines = new List<Rope>();
         }
 
         public void set(int row, int column, double value)
@@ -67,60 +62,18 @@ namespace linearAlgebra
             return value;
         }
 
-        public void draw()
+        public void draw(MeshGeometry3D shape)
         {
-            matrixLines.Clear();
-            matrixPoints.Clear();
+            var positions = shape.Positions;
+
             for (int column = 1; column <= columns; column++)
             {
-                Point point = new Point(canvas, 0 , 0);
-
-                for (int row = 1; row <= 2; row++)
-                {
-                    double? value = doubleKeyDictionary.get(row, column);
-                    if(value != null)
-                    {
-                        switch (row)
-                        {
-                            case 1: //X
-                                point.x = (double)value;
-                                break;
-                            case 2: //Y
-                                point.y = (double)value;
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        throw new Exception("Not all matrix values have been entered");
-                    }
-                }
-
-                matrixPoints.Add(point);
+                double x = (double)get(1, column);
+                double y = (double)get(2, column);
+                double z = (double)get(3, column);
+                Point3D position = new Point3D(x, y, z);
+                positions[column-1] = position;
             }
-
-            for(int pointIndex = 0; pointIndex < matrixPoints.Count; pointIndex++)
-            {
-                matrixPoints[pointIndex].draw();
-                Rope line;
-                if(pointIndex == matrixPoints.Count - 1)
-                {
-                    line = new Rope(canvas, matrixPoints[pointIndex].x, matrixPoints[pointIndex].y, matrixPoints[0].x, matrixPoints[0].y);
-                    matrixLines.Add(line);
-                }
-                else
-                {
-                    line = new Rope(canvas, matrixPoints[pointIndex].x, matrixPoints[pointIndex].y, matrixPoints[pointIndex+1].x, matrixPoints[pointIndex + 1].y);
-                    matrixLines.Add(line);
-                }
-                line.draw();
-            }
-        }
-
-        public void undraw()
-        {
-            foreach(Rope r in matrixLines) r.undraw();       
-            foreach (Point p in matrixPoints) p.undraw();
         }
     }
 

@@ -9,6 +9,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
@@ -19,61 +20,56 @@ namespace linearAlgebra
     /// </summary>
     public partial class MainWindow : Window
     {
-        Matrix shape;
+        Matrix cubeMatrix;
         public MainWindow() 
         {
             InitializeComponent();
-            initShape();
+            initShapeMatrix();
         }
 
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
             switch (e.Key)
             {
-                case Key.Right:
-                    shape.undraw();
-                    shape = translate(shape, 5, 0);
-                    shape.draw();
+                case Key.Right:               
+                    cubeMatrix = translate(cubeMatrix, 5, 0);
+                    cubeMatrix.draw(cube);
                     break;
-                case Key.Left:
-                    shape.undraw();
-                    shape = translate(shape, -5, 0);
-                    shape.draw();
+                case Key.Left:           
+                    cubeMatrix = translate(cubeMatrix, -5, 0);
+                    cubeMatrix.draw(cube);
                     break;
-                case Key.Up:
-                    shape.undraw();
-                    shape = translate(shape, 0, -5);
-                    shape.draw();
+                case Key.Up:                 
+                    cubeMatrix = translate(cubeMatrix, 0, -5);
+                    cubeMatrix.draw(cube);
                     break;
-                case Key.Down:
-                    shape.undraw();
-                    shape = translate(shape, 0, 5);
-                    shape.draw();
+                case Key.Down:              
+                    cubeMatrix = translate(cubeMatrix, 0, 5);
+                    cubeMatrix.draw(cube);
                     break;
-                case Key.OemMinus:            
-                    shape.undraw();
-                    shape = scale(shape, 0.9, 0.9);
-                    shape.draw();
+                case Key.OemMinus:                        
+                    cubeMatrix = scale(cubeMatrix, 0.9, 0.9);
+                    cubeMatrix.draw(cube);
                     break;
-                case Key.OemPlus:
-                    shape.undraw();
-                    shape = scale(shape, 1.1, 1.1);
-                    shape.draw();
+                case Key.OemPlus:          
+                    cubeMatrix = scale(cubeMatrix, 1.1, 1.1);
+                    cubeMatrix.draw(cube);
                     break;
                 case Key.D:
-                    shape.undraw();
-                    shape = rotate(shape, 10, 300, 300);
-                    shape.draw();
+                    cubeMatrix = rotateMatrix(cubeMatrix, 10, 300, 300);
+                    cubeMatrix.draw(cube);
                     break;
                 case Key.A:
-                    shape.undraw();
-                    shape = rotate(shape, -10, 300, 300);
-                    shape.draw();
+                    cubeMatrix = rotateMatrix(cubeMatrix, -10, 300, 300);
+                    cubeMatrix.draw(cube);
                     break;
                 case Key.Z:
-                    shape.undraw();
-                    shape = scaleAndTranslate(shape, 1.1, 1.1, -10, -10);
-                    shape.draw();
+                    cubeMatrix = scaleAndTranslate(cubeMatrix, 1.1, 1.1, -10, -10);
+                    cubeMatrix.draw(cube);
+                    break;
+                case Key.Space:
+                    cubeMatrix.set(1, 1, 2);
+                    cubeMatrix.draw(cube);
                     break;
             }
         }
@@ -81,7 +77,7 @@ namespace linearAlgebra
         private Matrix multiplyMatrices(Matrix A, Matrix B)
         {
             Matrix C;
-            C = new Matrix(canvas, A.rows, B.columns);
+            C = new Matrix(A.rows, B.columns);
             for (int row = 1; row <= C.rows; row++)
             {
                 for (int column = 1; column <= C.columns; column++)
@@ -96,7 +92,7 @@ namespace linearAlgebra
         {
             if (matrixToTranslate.rows != 2) throw new Exception("Incorrect number of rows in matrix to translate (should be 2)");
 
-            Matrix translationMatrix = new Matrix(canvas, 3, 3);
+            Matrix translationMatrix = new Matrix(3, 3);
             translationMatrix.set(1, 1, 1);
             translationMatrix.set(1, 2, 0);
             translationMatrix.set(1, 3, translationX);
@@ -125,7 +121,7 @@ namespace linearAlgebra
         {
             if (matrixToScale.rows != 2) throw new Exception("Incorrect number of rows in matrix to translate (should be 2)");
 
-            Matrix scalingMatrix = new Matrix(canvas, 2, 2);
+            Matrix scalingMatrix = new Matrix(2, 2);
 
             scalingMatrix.set(1, 1, scaleX);
             scalingMatrix.set(1, 2, 0);
@@ -141,7 +137,7 @@ namespace linearAlgebra
         {
             if (matrixToUpdate.rows != 2) throw new Exception("Incorrect number of rows in matrix to translate (should be 2)");
 
-            Matrix updateMatrix = new Matrix(canvas, 3, 3);
+            Matrix updateMatrix = new Matrix(3, 3);
             updateMatrix.set(1, 1, scaleX);
             updateMatrix.set(1, 2, 0);
             updateMatrix.set(1, 3, translationX);
@@ -166,13 +162,13 @@ namespace linearAlgebra
             return returnMatrix;
         }
 
-        private Matrix rotate(Matrix matrixToRotate, double degrees, double rotationPointX, double rotationPointY)
+        private Matrix rotateMatrix(Matrix matrixToRotate, double degrees, double rotationPointX, double rotationPointY)
         {
             double theta = Math.Sin(degrees * (Math.PI / 180.0));
             double cos = Math.Cos(theta);
             double sin = Math.Sin(theta);
 
-            Matrix rotationMatrix = new Matrix(canvas, 2, 2);
+            Matrix rotationMatrix = new Matrix(2, 2);
             rotationMatrix.set(1, 1, cos);
             rotationMatrix.set(1, 2, -sin);
             rotationMatrix.set(2, 1, sin);
@@ -201,21 +197,18 @@ namespace linearAlgebra
             return (double)answer;
         }
 
-        private void initShape()
+        private void initShapeMatrix()
         {
-            shape = new Matrix(canvas, 2, 4);
+            var positions = cube.Positions;
 
-            shape.set(1, 1, 100);
-            shape.set(1, 2, 500);
-            shape.set(1, 3, 500);
-            shape.set(1, 4, 100);
+            cubeMatrix = new Matrix(3, 8);
 
-            shape.set(2, 1, 100);
-            shape.set(2, 2, 100);
-            shape.set(2, 3, 500);
-            shape.set(2, 4, 500);
-
-            shape.draw();
+            for (var i = 0; i < positions.Count; i++)
+            {
+                cubeMatrix.set(1, i+1, positions[i].X);
+                cubeMatrix.set(2, i+1, positions[i].Y);
+                cubeMatrix.set(3, i+1, positions[i].Z);
+            } 
         }
     }
 }
