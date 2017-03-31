@@ -78,7 +78,7 @@
                         <GeometryModel3D>
                             <GeometryModel3D.Geometry>
                                 <MeshGeometry3D Positions = "0,0,0 0,8,0 10,0,0 8,8,0"
-                           Normals = "0,0,1 0,0,1 0,0,1 0,0,1" TriangleIndices = "0,2,1 1,2,3"/>
+                           TriangleIndices = "0,2,1 1,2,3"/>
                             </GeometryModel3D.Geometry>
 
                             <GeometryModel3D.Material>
@@ -89,8 +89,27 @@
                     </Model3DGroup>
                 </ModelVisual3D.Content>
             </ModelVisual3D>
-            
-           
+
+            <ModelVisual3D>
+                <ModelVisual3D.Content>
+                    <Model3DGroup>
+
+                        <GeometryModel3D>
+                            <GeometryModel3D.Geometry>
+                                <MeshGeometry3D Positions = "0,8,8  0,8,0 0,0,10 0,0,0"
+                           TriangleIndices = "1,2,3 0,2,1"/>
+                            </GeometryModel3D.Geometry>
+
+                            <GeometryModel3D.Material>
+                                <DiffuseMaterial Brush = "Bisque" />
+                            </GeometryModel3D.Material>
+                        </GeometryModel3D>
+
+                    </Model3DGroup>
+                </ModelVisual3D.Content>
+            </ModelVisual3D>
+
+
         </Viewport3D>
    
         <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="52" Margin="10,257,0,0" TextWrapping="Wrap" Text="Matrix" VerticalAlignment="Top" Width="146"/>

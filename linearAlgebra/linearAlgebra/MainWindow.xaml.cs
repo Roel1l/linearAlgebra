@@ -461,5 +461,32 @@ namespace linearAlgebra
             } 
         }
 
+        private double getInproduct(Vector A, Vector B)
+        {
+            return A.x * B.x + A.y * B.y + A.z * B.z;
+        }
+
+        private double getAngle(Vector A, Vector B)
+        {
+            double inproductAB = getInproduct(A, B);
+            double lengteA = getInproduct(A, A);
+            double lengteB = getInproduct(B, B);
+
+            double cosAlpha = inproductAB / (lengteA * lengteB);
+
+           //als cosAlpha 0 is dan hebben we te maken met een haakse hoek 90 of 270 graden
+            return cosAlpha;
+        }
+
+        private Vector getUitproduct(Vector A, Vector B)
+        {
+            double x, y, z;
+            x = A.y * B.z - B.y * A.z;
+            y = A.x * B.z - B.x * A.z;
+            z = A.x * B.y - B.x * A.y;
+
+            Vector returnVector = new Vector(x, y, z);
+            return returnVector;
+        }
     }
 }
